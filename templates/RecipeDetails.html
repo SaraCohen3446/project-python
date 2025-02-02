@@ -1,0 +1,14 @@
+{% for recipe in recipes %}
+    <div class="recipe">
+        <h2>{{ recipe.Title }}</h2>
+        <p>{{ recipe.Description }}</p>
+        <p><strong>Ingredients:</strong> {{ recipe.Ingredients }}</p>
+        <p><strong>Instructions:</strong> {{ recipe.Instructions }}</p>
+
+        <!-- כפתור להצגת התגובות -->
+        <form action="{{ url_for('get_comments') }}" method="GET">
+            <input type="hidden" name="recipe_id" value="{{ recipe.RecipeID }}">
+            <button type="submit">Show Comments</button>
+        </form>
+    </div>
+{% endfor %}

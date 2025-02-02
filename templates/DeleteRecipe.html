@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>delete recipe</title>
+</head>
+<body>
+    <h1>delete recipe by id</h1>
+    <form action="{{ url_for('delete_recipe_by_id') }}" method="POST">
+        <label for="RecipeID">enter recipe id</label>
+        <input type="text" id="RecipeID" name="RecipeID" required>
+        <button type="submit">delete</button>
+    </form>
+
+</body>
+</html>
