@@ -1,17 +1,14 @@
 <!DOCTYPE html>
-<html lang="he">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>delete recipe</title>
+    <title>Delete Recipe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/deleteRecipe.css') }}">
 </head>
 <body>
-    <h1>delete recipe by id</h1>
-    <form action="{{ url_for('delete_recipe_by_id') }}" method="POST">
-        <label for="RecipeID">enter recipe id</label>
-        <input type="text" id="RecipeID" name="RecipeID" required>
-        <button type="submit">delete</button>
+    <h2>Delete a Recipe</h2>
+    <form method="POST">
+        <input type="text" name="recipe_id" placeholder="Enter Recipe ID" required>
+        <button type="submit">Delete</button>
     </form>
-
 </body>
 </html>

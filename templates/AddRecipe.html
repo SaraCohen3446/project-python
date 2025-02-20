@@ -1,26 +1,21 @@
 <!DOCTYPE html>
-<html lang="he">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> add recipe</title>
+    <title>Add Recipe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/addRecipe.css') }}">
 </head>
 <body>
-    <h1>add new recipe</h1>
-    <form action="{{ url_for('add_new_recipe') }}" method="POST">
-        <label for="title">recipe title</label>
-        <input type="text" id="title" name="title" required><br><br>
+    <h2>Add a Recipe</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="text" name="title" placeholder="Title" required>
+        <textarea name="description" placeholder="Description"></textarea>
+        <textarea name="ingredients" placeholder="Ingredients" required></textarea>
+        <textarea name="instructions" placeholder="Instructions" required></textarea>
+        <label for="image">Image:</label>
+        <input type="file" name="image" id="image">
 
-        <label for="description">recipe description</label>
-        <textarea id="description" name="description" required></textarea><br><br>
-
-        <label for="ingredients">ingredients</label>
-        <textarea id="ingredients" name="ingredients" required></textarea><br><br>
-
-        <label for="instructions">instructions</label>
-        <textarea id="instructions" name="instructions" required></textarea><br><br>
-
-        <button type="submit">add recipe</button>
+        <button type="submit">Add Recipe</button>
     </form>
 </body>
 </html>
+

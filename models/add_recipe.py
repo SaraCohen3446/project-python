@@ -6,10 +6,10 @@ def connect_to_database():
     return pyodbc.connect(connection_string)
 
 # מוסיף מתכון חדש לטבלת המתכונים (Recipes), מקשר אותו למשתמש המחובר.
-def add_recipe(connection, UserId, title, description, ingredients, instructions):
-    query = "INSERT INTO Recipes (UserID, Title, Description, Ingredients, Instructions)  VALUES (?, ?, ?, ?, ?)  """
+def add_recipe(connection, UserId, title, description, ingredients, instructions, image_filename=None):
+    query = "INSERT INTO Recipes (UserID, Title, Description, Ingredients, Instructions, Image) VALUES (?, ?, ?, ?, ?, ?)"
     with connection.cursor() as cursor:
-        cursor.execute(query, (UserId, title, description, ingredients, instructions))
+        cursor.execute(query, (UserId, title, description, ingredients, instructions, image_filename))
         connection.commit()
     print("Recipe added successfully!")
 

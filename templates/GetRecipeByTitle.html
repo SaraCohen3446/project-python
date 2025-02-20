@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Search recipe by title</h1>
-    <form action="{{ url_for('view_recipe') }}" method="POST">
+    <form action="{{ url_for('get_recipe_by_title') }}" method="POST">
         <label for="Title">Enter recipe title:</label>
         <input type="text" id="Title" name="Title" required>
         <button type="submit">Search</button>

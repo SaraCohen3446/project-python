@@ -1,14 +1,25 @@
-{% for recipe in recipes %}
-    <div class="recipe">
-        <h2>{{ recipe.Title }}</h2>
-        <p>{{ recipe.Description }}</p>
-        <p><strong>Ingredients:</strong> {{ recipe.Ingredients }}</p>
-        <p><strong>Instructions:</strong> {{ recipe.Instructions }}</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ recipe.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/recipeDetails.css') }}">
+</head>
+<body>
+    <h1>{{ recipe.title }}</h1>
+    <p>{{ recipe.description }}</p>
+    <h3>Ingredients</h3>
+    <p>{{ recipe.ingredients }}</p>
+    <h3>Instructions</h3>
+    <p>{{ recipe.instructions }}</p>
 
-        <!-- כפתור להצגת התגובות -->
-        <form action="{{ url_for('get_comments') }}" method="GET">
-            <input type="hidden" name="recipe_id" value="{{ recipe.RecipeID }}">
-            <button type="submit">Show Comments</button>
-        </form>
-    </div>
-{% endfor %}
+    <!-- Display the recipe image if it exists -->
+    {% if recipe.image %}
+        <h3>Recipe Image</h3>
+        <img src="{{ url_for('static', filename='uploads/' + recipe.image) }}" alt="{{ recipe.title }}" style="max-width: 100%; height: auto;">
+    {% endif %}
+
+    <form action="{{ url_for('view_recipe_comments', recipe_id=recipe['recipe_id']) }}" method="get">
+        <button type="submit">View Comments</button>
+    </form>
+</body>
+</html>

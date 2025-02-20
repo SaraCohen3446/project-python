@@ -1,26 +1,30 @@
 <!DOCTYPE html>
-<html lang="he">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Comments</title>
+    <title>{{ recipe.title }} - Comments</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/recipeComments.css') }}">
 </head>
 <body>
-    <h1>Comments for Recipe {{ recipe_id }}</h1>
+    <h1>Comments for {{ recipe.title }}</h1>
 
-    {% if comments %}
-        <ul>
-            {% for comment in comments %}
-                <li>
-                    <p><strong>Comment:</strong> {{ comment.Content }}</p>
-                    <p><strong>Date:</strong> {{ comment.DateCreated }}</p>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No comments yet.</p>
-    {% endif %}
+    <!-- הצגת התגובות -->
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <p>{{ comment.content }}</p>
+            <p><small>{{ comment.date_created }}</small></p>
+        </li>
+        {% endfor %}
+    </ul>
 
-    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    <!-- טופס להוספת תגובה -->
+    <h3>Add a Comment</h3>
+    <form action="{{ url_for('add_recipe_comment', recipe_id=recipe.recipe_id) }}" method="post">
+        <textarea name="content" required></textarea><br>
+        <button type="submit">Submit Comment</button>
+    </form>
+
+    <br><br>
+    <a href="{{ url_for('view_recipe', recipe_id=recipe.recipe_id) }}">Back to Recipe</a>
 </body>
 </html>
