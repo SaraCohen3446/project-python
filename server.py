@@ -21,10 +21,21 @@ def allowed_file(filename):
 
 
 # Home page
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def root():
     user_id = session.get('user_id')
-    return render_template('Server.html', user_id=user_id)
+
+    # אם מתבצע חיפוש, נעביר את השאילתה למסלול get_recipe_by_title
+    if request.method == 'POST':
+        title = request.form.get('title', '').strip()
+        return redirect(url_for('get_recipe_by_title', title=title))
+
+    # אם אין חיפוש, נשלוף את כל המתכונים
+    with get_recipe.connect_to_database() as connection:
+        recipes = get_recipe.get_all_recipes(connection)
+
+    return render_template('Server.html', user_id=user_id, recipes=recipes)
+
 
 
 # View comments for a specific recipe
@@ -126,8 +137,6 @@ def delete_recipe_route(recipe_id):
     return redirect(url_for('dashboard'))
 
 
-# Add new recipe
-# הוספת מתכון חדש
 # הוספת מתכון חדש
 @app.route('/add_new_recipe', methods=['GET', 'POST'])
 def add_new_recipe():
@@ -169,18 +178,20 @@ def add_new_recipe():
 
 
 # צפייה במתכון לפי כותרת
-@app.route('/get_recipe_by_title', methods=['GET', 'POST'])
+@app.route('/get_recipe_by_title', methods=['GET'])
 def get_recipe_by_title():
-    if request.method == 'POST':
-        title = request.form.get('title', '').strip()
+    title = request.args.get('title', '').strip()
 
-        with get_recipe.connect_to_database() as connection:
-            recipe = get_recipe.get_recipe_by_title(connection, title)
+    if not title:
+        return "Title is required", 400
 
-        if recipe:
-            return render_template('RecipeDetails.html', recipe=recipe)
-        return "Recipe not found", 404
-    return render_template('GetRecipeByTitle.html')
+    with get_recipe.connect_to_database() as connection:
+        recipe = get_recipe.get_recipe_by_title(connection, title)
+
+    if recipe:
+        return render_template('RecipeDetails.html', recipe=recipe)
+
+    return "Recipe not found", 404
 
 
 # מחיקת משתמש

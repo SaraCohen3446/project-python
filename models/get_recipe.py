@@ -38,26 +38,36 @@ def get_user_recipes(connection, user_id):
 # שולף מתכון לפי כותרת
 
 def get_recipe_by_title(connection, title):
-    query = "SELECT RecipeID, Title, Description, Ingredients, Instructions, DateCreated FROM Recipes WHERE Title = ?"
+    query = "SELECT RecipeID, Title, Description, Ingredients, Instructions, DateCreated FROM Recipes WHERE Title LIKE ?"
     cursor = connection.cursor()
-    cursor.execute(query, (title,))
-    result = cursor.fetchone()
+    cursor.execute(query, ('%' + title + '%',))  # חיפוש חלקי
+    results = cursor.fetchall()
 
-    if result:
-        return {
-            'recipe_id': result.RecipeID,
-            'title': result.Title,
-            'description': result.Description,
-            'ingredients': result.Ingredients,
-            'instructions': result.Instructions,
-            'date_created': result.DateCreated
+    return [
+        {
+            'recipe_id': row.RecipeID,
+            'title': row.Title,
+            'description': row.Description,
+            'ingredients': row.Ingredients,
+            'instructions': row.Instructions,
+            'image': row.Image,
+            'date_created': row.DateCreated
         }
-    return None
+        for row in results
+    ]
+
 
 # שולף את כל התגובות למתכון
-
 def get_comments_by_recipe_id(connection, recipe_id):
     query = "SELECT CommentID, Content, DateCreated FROM Comments WHERE RecipeID = ?"
     cursor = connection.cursor()
     cursor.execute(query, (recipe_id,))
     return [{'comment_id': row.CommentID, 'content': row.Content, 'date_created': row.DateCreated} for row in cursor.fetchall()]
+
+# שולף את כל המתכונים
+def get_all_recipes(connection):
+    query = "SELECT RecipeID, Title, Description FROM Recipes"
+    cursor = connection.cursor()
+    cursor.execute(query)
+    recipes = cursor.fetchall()
+    return [{'recipe_id': row.RecipeID, 'title': row.Title, 'description': row.Description} for row in recipes]

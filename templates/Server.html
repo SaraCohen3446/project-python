@@ -1,30 +1,43 @@
 <!DOCTYPE html>
-<html lang="he">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>recipe in 10 minitues</title>
+    <title>Recipe in 10 Minutes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/server.css') }}">
 </head>
 <body>
     <header>
         <nav>
-            <a href="{{ url_for('add_new_recipe') }}">Add recipe</a>
+            <a href="{{ url_for('add_new_recipe') }}">Add Recipe</a>
             {% if user_id %}
-                <a href="{{ url_for('dashboard') }}">Youre recipe</a>
-                <a href="{{ url_for('logout') }}">Log out</a>
+                <a href="{{ url_for('dashboard') }}">Your Recipes</a>
+                <a href="{{ url_for('logout') }}">Log Out</a>
             {% else %}
-                <a href="{{ url_for('login') }}">Log in</a>
-                <a href="{{ url_for('add_new_user') }}">Sign in</a>
+                <a href="{{ url_for('login') }}">Log In</a>
+                <a href="{{ url_for('add_new_user') }}">Sign Up</a>
             {% endif %}
         </nav>
     </header>
-      <div class="logo">
-            <img src="{{ url_for('static', filename='uploads/wallper.png') }}" alt="לוגו האתר">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='uploads/wallper.png') }}" alt="Website Logo">
+    </div>
+    <form action="{{ url_for('root') }}" method="POST">
+        <input type="text" name="title" placeholder="Search Recipe" required>
+        <button type="submit">Search</button>
+    </form>
+    <div class="recipe-container">
+        {% for recipe in recipes %}
+        <div class="recipe-card" onclick="window.location.href='{{ url_for('view_recipe', recipe_id=recipe.recipe_id) }}'">
+            {% if recipe.image %}
+                <img src="{{ url_for('static', filename='uploads/' + recipe.image) }}" alt="{{ recipe.title }}">
+            {% else %}
+                <img src="{{ url_for('static', filename='uploads/default.jpg') }}" alt="{{ recipe.title }}">
+            {% endif %}
+            <h3>{{ recipe.title }}</h3>
+            <p>{{ recipe.description[:100] }}...</p>
         </div>
-        <form action="{{ url_for('get_recipe_by_title') }}" method="POST">
-            <input type="text" name="title" placeholder="Search recipe" required>
-            <button type="submit">search</button>
-        </form>
+        {% endfor %}
+    </div>
 </body>
 </html>
